@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Message {
@@ -54,4 +55,21 @@ public abstract class Message {
        setRecipient(recipient);
        setSendDate(sendDate); 
     }
+
+    public boolean find(ArrayList<String> keywords) {
+        for (String keyword : keywords) {
+            if (content.contains(keyword)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int getWordCount() {
+    if (this.content == null || this.content.isEmpty()) {
+        return 0;
+    }
+    
+    String[] words = this.content.trim().split("\s+");
+    return words.length;
  }
+}

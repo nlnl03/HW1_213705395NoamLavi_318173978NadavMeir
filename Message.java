@@ -8,6 +8,7 @@ public abstract class Message {
     protected Date sendDate;
     protected String recipient;
 
+    //get set
     public String getSender() {
         return sender;
     }
@@ -34,7 +35,14 @@ public abstract class Message {
         this.content = content;
     }
     public void setSendDate(Date sendDate) {
-        this.sendDate = sendDate;
+        if (sendDate == null) {
+            throw new IllegalArgumentException("Send date cannot be null");
+        }
+        Date now = new Date();
+        if (sendDate.after(now)) {
+            throw new IllegalArgumentException("Send date cannot be in the future");
+        }
+        this.sendDate = new Date(sendDate.getTime());
     }
 
     public void setRecipient(String recipient) {
@@ -43,17 +51,21 @@ public abstract class Message {
      }  
         this.recipient = recipient;
     }
-
-    @Override
-    public String toString() {
-        return "From: " + sender + "\nTo: " + recipient + "\nDate: " + sendDate + "\nContent: " + content;
-    }
-
+    //
     public Message(String sender, String recipient, String content, Date sendDate) {
        setContent(content);
        setSender(sender);
        setRecipient(recipient);
        setSendDate(sendDate); 
+    }
+
+    public Message(String sender, String recipient, String content){
+        this(sender, recipient, content, new Date());
+    }
+
+    @Override
+    public String toString() {
+        return "From: " + sender + "\nTo: " + recipient + "\nDate: " + sendDate + "\nContent: " + content;
     }
 
     public boolean find(ArrayList<String> keywords) {
@@ -65,11 +77,14 @@ public abstract class Message {
         return false;
     }
     public int getWordCount() {
-    if (this.content == null || this.content.isEmpty()) {
-        return 0;
+        if (this.content == null || this.content.isEmpty()) {
+            return 0;
+        }
+        String[] words = this.content.trim().split("\s+");
+        return words.length;
     }
-    
-    String[] words = this.content.trim().split("\s+");
-    return words.length;
- }
+
+    public abstract String generatePreview();
+        
+
 }

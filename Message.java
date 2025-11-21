@@ -1,4 +1,5 @@
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -65,7 +66,11 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "From: " + sender + "\nTo: " + recipient + "\nDate: " + sendDate + "\nContent: " + content;
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDate = (sendDate == null)
+            ? "null"
+            : sendDate.toInstant().atZone(java.time.ZoneId.systemDefault()).format(fmt);
+        return "Message{sender='" + sender + "', recipient='" + recipient + "', sendDate=" + formattedDate + ", content='" + content + "'}";
     }
 
     public boolean find(ArrayList<String> keywords) {

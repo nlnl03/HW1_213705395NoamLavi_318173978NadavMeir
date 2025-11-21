@@ -1,13 +1,17 @@
 import java.util.Date;
 
-enum PriorityType
+
+
+public class BoardMessage extends Message
 {
+    
+    enum PriorityType
+    {
     REGULAR,
     URGENT,
     CRITICAL
-}
-public class BoardMessage extends Message
-{
+    }
+    
     private PriorityType priority;
     private Date expirationDate;
     
@@ -19,6 +23,7 @@ public class BoardMessage extends Message
         if (priority == null) {
             throw new IllegalArgumentException("Priority cannot be null");
         }
+        this.priority = priority;
     }
     public Date getExpirationDate() {
         return expirationDate;
@@ -57,7 +62,8 @@ public class BoardMessage extends Message
         long diff = this.expirationDate.getTime() - new Date().getTime();
         return diff / millisPerDay;
     }
-
+    
+    @Override
     public String generatePreview() {
         String senderName = (this.sender == null) ? "" : this.sender;
         String contentStr = (this.content == null) ? "" : this.content.trim();

@@ -16,14 +16,16 @@ public class EmailMessage extends Message implements IDigital
         if (subject == null || subject.isEmpty()) {
             throw new IllegalArgumentException("Subject cannot be null or empty");
         }
-        this.subject = subject;
+        this.subject = subject.trim();
     }
     //
     public EmailMessage(String sender, String recipient, String content, Date sendDate, String subject, ArrayList<File> attachments) {
         super(sender, recipient, content, sendDate);
         setSubject(subject);
-        this.attachments = attachments;
+        if (attachments == null) this.attachments = new ArrayList<>();
+        else this.attachments = new ArrayList<>(attachments);
     }
+
     public EmailMessage(String sender, String recipient, String content, String subject){
         this(sender, recipient, content, new Date(), subject, new ArrayList<File>());
     }
@@ -37,21 +39,21 @@ public class EmailMessage extends Message implements IDigital
         return "Sent via Email Server.";
     }
 
-    
+    @Override
     public String generatePreview() {
         String subj = (this.subject == null) ? "" : this.subject.trim();
         String senderName = (this.sender == null) ? "" : this.sender;
         return "[Email] Subject: " + subj + " | From: " + senderName;
     }    
     
-    private void addAttachment(File attachment) {
+    public void addAttachment(File attachment) {
         if (attachment == null) {
             throw new IllegalArgumentException("Attachment cannot be null");
         }
         attachments.add(attachment);
     }
 
-    public boolean removeAttachment(File attachment) throws AttachmentException {
+    public void removeAttachment(File attachment) throws AttachmentException {
         if (attachment == null) {
             throw new IllegalArgumentException("Attachment cannot be null");
         }
@@ -66,6 +68,5 @@ public class EmailMessage extends Message implements IDigital
         if (!removedAny) {
             throw new AttachmentException("Attachment not found: " + attachment);
         }
-        return true;
     }
 }

@@ -11,6 +11,7 @@ public class File {
         if (fileName == null || fileName.isEmpty()) {
             throw new IllegalArgumentException("File name cannot be null or empty");
         }
+        this.fileName = fileName.trim();
     }
     public String getFileType() {
         return fileType;
@@ -19,6 +20,7 @@ public class File {
         if (fileType == null || fileType.isEmpty()) {
             throw new IllegalArgumentException("File type cannot be null or empty");
         }
+        this.fileType = fileType.trim();
     }
     //
 
@@ -32,6 +34,17 @@ public class File {
         return "File Name: " + fileName + "\nFile Type: " + fileType;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof File)) return false;
+        File file = (File) obj;
+        return fileName.equalsIgnoreCase(file.fileName) &&
+        fileType.equalsIgnoreCase(file.fileType);
+    }
 
-
+    // @Override
+    // public int hashCode() {
+    //     return fileName.toLowerCase().hashCode() + fileType.toLowerCase().hashCode();
+    // }
 }
